@@ -4,12 +4,14 @@
 
 #define MAX_BLOCKS 100
 
-typedef struct Block {
+typedef struct Block 
+{
     int blockNumber;
     struct Block *next;
 } Block;
 
-typedef struct File {
+typedef struct File 
+{
     char fileName[100];
     Block *startBlock;
 } File;
@@ -18,23 +20,31 @@ File files[MAX_BLOCKS];
 int fileCount = 0;
 int availableBlocks[MAX_BLOCKS]; // 0 means free, 1 means allocated
 
-void initializeBlocks() {
-    for (int i = 0; i < MAX_BLOCKS; i++) {
+void initializeBlocks() 
+{
+    for (int i = 0; i < MAX_BLOCKS; i++) 
+    {
         availableBlocks[i] = 0; // All blocks are initially free
     }
 }
 
-Block *allocateBlocks(int numBlocks) {
+Block *allocateBlocks(int numBlocks) 
+{
     Block *head = NULL, *tail = NULL;
-    for (int i = 0; i < MAX_BLOCKS && numBlocks > 0; i++) {
-        if (availableBlocks[i] == 0) {
+    for (int i = 0; i < MAX_BLOCKS && numBlocks > 0; i++) 
+    {
+        if (availableBlocks[i] == 0) 
+        {
             Block *newBlock = (Block *)malloc(sizeof(Block));
             newBlock->blockNumber = i;
             newBlock->next = NULL;
 
-            if (head == NULL) {
+            if (head == NULL) 
+            {
                 head = newBlock;
-            } else {
+            } 
+            else 
+            {
                 tail->next = newBlock;
             }
             tail = newBlock;
@@ -44,21 +54,25 @@ Block *allocateBlocks(int numBlocks) {
         }
     }
 
-    if (numBlocks > 0) {
+    if (numBlocks > 0) 
+    {
         printf("Not enough free blocks available.\n");
         return NULL;
     }
     return head;
 }
 
-void createFile(char *fileName, int numBlocks) {
-    if (fileCount >= MAX_BLOCKS) {
+void createFile(char *fileName, int numBlocks) 
+{
+    if (fileCount >= MAX_BLOCKS) 
+    {
         printf("Maximum file limit reached.\n");
         return;
     }
 
     Block *allocatedBlocks = allocateBlocks(numBlocks);
-    if (allocatedBlocks == NULL) {
+    if (allocatedBlocks == NULL) 
+    {
         printf("File '%s' creation failed.\n", fileName);
         return;
     }
@@ -70,8 +84,10 @@ void createFile(char *fileName, int numBlocks) {
     printf("File '%s' created successfully with %d blocks.\n", fileName, numBlocks);
 }
 
-void deleteFile(char *fileName) {
-    for (int i = 0; i < fileCount; i++) {
+void deleteFile(char *fileName) 
+{
+    for (int i = 0; i < fileCount; i++) 
+    {
         if (strcmp(files[i].fileName, fileName) == 0) {
             Block *current = files[i].startBlock;
             while (current != NULL) {
